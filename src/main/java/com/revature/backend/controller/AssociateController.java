@@ -85,6 +85,9 @@ public class AssociateController {
 	
 	@PutMapping("/associates")
 	public ResponseEntity<String> updateAssociate(@RequestBody LinkedHashMap<String, Integer> assocMap){
+    System.out.println(assocMap);
+    System.out.println(assocMap.get("associate_id"));
+    System.out.println(assocMap.get("batch_id"));
 		Associate associate = assocService.getAssociateById(assocMap.get("associate_id"));
 		if (associate == null ) {
 			return new ResponseEntity<>("Could not find associate", HttpStatus.NO_CONTENT);
