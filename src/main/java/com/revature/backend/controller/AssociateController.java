@@ -22,10 +22,8 @@ import com.revature.backend.service.BackendService;
 import com.revature.backend.service.BatchServiceImpl;
 
 @RestController
-@CrossOrigin("*")
-//@CrossOrigin("http://ec2-54-237-27-253.compute-1.amazonaws.com")
 public class AssociateController {
-	
+
 	@Autowired
 	BackendService backendService;
 	
@@ -38,51 +36,51 @@ public class AssociateController {
 	
 	@GetMapping("/associates")
 	public ResponseEntity<List<AssociateDTO>> getAssociates(@RequestParam int manager) {
-		ResponseEntity<List<AssociateDTO>> ret;
 		List<AssociateDTO> body = null;
 		List<Associate> associates = backendService.findAssociatesByManagerId(manager);
-		
+
 		if (associates == null || associates.size() == 0) {
-			ret =  new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		} else {
 			body = new ArrayList<>();
-			for (Associate a: associates) {
+			for (Associate a : associates) {
 				body.add(new AssociateDTO(a));
 			}
-			ret = ResponseEntity.ok(body);
-		}		
-		return ret;		
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}
 	}
-	
+
 	/**
-	 * Given a manager id, will return associates assigned to that manager and have enter staging in the last 7 days.
+	 * Given a manager id, will return associates assigned to that manager and have
+	 * enter staging in the last 7 days.
+	 * 
 	 * @param manager
 	 * @return
 	 */
-	
+
 	@GetMapping("/associates/new")
-	public ResponseEntity<List<AssociateDTO>> getNewAssociates(@RequestParam int manager){
-		ResponseEntity<List<AssociateDTO>> ret = null;
+	public ResponseEntity<List<AssociateDTO>> getNewAssociates(@RequestParam int manager) {
 		List<AssociateDTO> body = null;
 		List<Associate> associates = backendService.findNewAssociatesByManagerId(manager);
 		if (associates == null || associates.size() == 0) {
-			ret =  new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-		}else {
-			
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		} else {
 			body = new ArrayList<>();
-			for (Associate a: associates) {
+			for (Associate a : associates) {
 				body.add(new AssociateDTO(a));
 			}
-			ret = ResponseEntity.ok(body);
-			
+			return new ResponseEntity<>(body, HttpStatus.OK);
 		}
-		return ret;
-		
 	}
 	
 	/**
+	 * Given a LinkedHashMap, gets the associate's id and tries to look them up. If
+	 * They exist, gets the batch's id and tries to find it. If it exists, assigns
+	 * that batch to the associate given.
+	 * 
+	 * @param assocMap a LinkedHashMap holding the info we need to update
+	 * @return
 	 */
-	
 	@PutMapping("/associates")
 	public ResponseEntity<String> updateAssociate(@RequestBody LinkedHashMap<String, Integer> assocMap){
     System.out.println(assocMap);
@@ -93,9 +91,13 @@ public class AssociateController {
 			return new ResponseEntity<>("Could not find associate", HttpStatus.NO_CONTENT);
 		}else {
 			Batch batch = batchService.getBatchById(assocMap.get("batch_id"));
+			if (batch == null ) {
+				return new ResponseEntity<>("Could not find batch", HttpStatus.NO_CONTENT);
+			}else {
 			associate.setBatch(batch);
 			assocService.updateAssociate(associate);
 			return new ResponseEntity<>("Associate updated successfully", HttpStatus.OK);
+			}
 		}
 	}
 }
