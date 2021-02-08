@@ -22,8 +22,6 @@ import com.revature.backend.service.BackendService;
 import com.revature.backend.service.BatchServiceImpl;
 
 @RestController
-@CrossOrigin("*")
-// @CrossOrigin("http://ec2-54-237-27-253.compute-1.amazonaws.com")
 public class AssociateController {
 
 	@Autowired
@@ -76,8 +74,13 @@ public class AssociateController {
 	}
 	
 	/**
+	 * Given a LinkedHashMap, gets the associate's id and tries to look them up. If
+	 * They exist, gets the batch's id and tries to find it. If it exists, assigns
+	 * that batch to the associate given.
+	 * 
+	 * @param assocMap a LinkedHashMap holding the info we need to update
+	 * @return
 	 */
-	
 	@PutMapping("/associates")
 	public ResponseEntity<String> updateAssociate(@RequestBody LinkedHashMap<String, Integer> assocMap){
 		Associate associate = assocService.getAssociateById(assocMap.get("associate_id"));

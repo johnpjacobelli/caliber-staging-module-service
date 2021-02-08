@@ -16,21 +16,13 @@ public class HomePage {
 	@FindBy(xpath = "//*[@class='btn btn-primary logout-btn']")
 	private WebElement logoutButton;
 	
-	@FindAll({
-		@FindBy(xpath = "//button[text()='Create SWOT']"),
-//		@FindBy(linkText = "Create SWOT")
-	})
+	@FindBy(xpath = "//button[text()='Create SWOT']")
 	private List<WebElement> createSwotButtons;
-	
-	@FindAll({
-		@FindBy(xpath = "//button[text()='View SWOTs']")
-	})
-	private List<WebElement> viewSwotButtons;
 	
 	@FindBy(id = "type")
 	private WebElement SwotTypeDropdown;
 	
-	@FindBy(id = "content")
+	@FindBy(id = "name")
 	private WebElement contentField;
 	
 	@FindBy(xpath = "//button[text()='ADD ITEM']")
@@ -43,7 +35,7 @@ public class HomePage {
 	private WebElement submitSwots;
 	
 	@FindBy(xpath = "//button[text()='View SWOTs']")
-	private WebElement viewSwots;
+	private List<WebElement> viewSwots;
 	
 	@FindBy(xpath = "//*[@id=\"data-row\"]/td[8]/button")
 	private WebElement updateBatchButton;
@@ -67,7 +59,7 @@ public class HomePage {
 	}
 	
 	public void clickViewSwotForAssociate(int rowId) {
-		WebElement viewButton = this.viewSwotButtons.get(rowId);
+		WebElement viewButton = this.viewSwots.get(rowId);
 		viewButton.click();
 	}
 	
@@ -99,8 +91,36 @@ public class HomePage {
 		this.submitSwots.click();
 	}
 	
-	public void clickViewSwots() {
-		this.viewSwots.click();
+	public void clickViewSwots(int index) {
+		this.viewSwots.get(index).click();
+	}
+
+	public WebElement getLogoutButton() {
+		return logoutButton;
+	}
+
+	public List<WebElement> getCreateSwotButtons() {
+		return createSwotButtons;
+	}
+
+	public WebElement getSwotTypeDropdown() {
+		return SwotTypeDropdown;
+	}
+
+	public WebElement getContentField() {
+		return contentField;
+	}
+
+	public WebElement getAddItem() {
+		return addItem;
+	}
+
+	public WebElement getSubmitSwots() {
+		return submitSwots;
+	}
+
+	public List<WebElement> getViewSwots() {
+		return viewSwots;
 	}
 	
 	public void clickChangeBatchBttn() {
