@@ -69,7 +69,6 @@ public class HomePage {
 
 		WebElement viewButton = this.viewSwots.get(rowId);
 		viewButton.click();
-
 	}
 	
 	public void selectSwotType(String type) {

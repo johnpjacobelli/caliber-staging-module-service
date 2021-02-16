@@ -10,19 +10,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.backend.config.SecurityConfig;
 import com.revature.backend.controller.SwotController;
@@ -34,16 +21,48 @@ import com.revature.backend.model.Swot;
 import com.revature.backend.security.JwtAuthenticationFilter;
 import com.revature.backend.service.SwotService;
 
-@WebMvcTest(SwotController.class)
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+/**
+ * This is a set of test for the SwotController class. It contaons 2 tests.<p>
+ * These tests make use of Junit 5.<p>
+ * test 1:Tests if the Application Loads.<p>
+ * test 2:Tests that you can hit the /swot/view/all endpoint and get the expected results.<p>
+ * 
+ * @author ? :wrote initial tests and individual test documentation.
+ * @author Matthew Sheldon: Updated tests to work with Junit 5 and updated documentation.
+ */
+@SpringBootTest
 public class SwotControllerTests {
 
 	ObjectMapper objectMapper = new ObjectMapper();
-
-
+	
+	@InjectMocks
+	SwotController swotController;
+	
 	private MockMvc mockMvc;
-
-	@MockBean
+	
+	@Mock
 	private SwotService service;
+
+  @BeforeEach
+  public void before(){
+    mockMvc=MockMvcBuilders.standaloneSetup(swotController).build();
+  }
 	
 	
 
@@ -115,5 +134,3 @@ public class SwotControllerTests {
 
 		this.mockMvc.perform(get("/swot/view/all")).andDo(print()).andExpect(status().isOk());
 	}
-
-}
